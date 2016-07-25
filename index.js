@@ -14,7 +14,11 @@ var express = require('express'),
   events = require('events'),
   favicon = require('serve-favicon'),
   bodyParser = require('body-parser'),
-  exphbs = require('express-handlebars');
+  exphbs = require('express-handlebars'),
+  passport = require('passport'),
+  session = require('express-session'),
+  RedisStore = require('connect-redis')(session);
+  
 
 /**** helpers ****/
 var handlebars = require('./helpers/handlebars');
@@ -87,6 +91,7 @@ app.expressInit = function() {
   exp.set('view engine', 'handlebars');
   exp.set('views', path.join(__dirname, 'views'));
 
+  //use favicon  
   exp.use(
     favicon(
       path.join(__dirname, 'public', 'img', 'favicon.ico'), {
@@ -172,6 +177,7 @@ app.expressInit = function() {
 
   });
 
+  //main route assigning section
   exp.post('/streams.:ext', stream.create.bind(this));
   exp.post('/streams', stream.create.bind(this));
   exp.post('/streams/:publicKey/notify/:type.:ext', stream.notify.bind(this));
