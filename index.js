@@ -17,8 +17,9 @@ var express = require('express'),
   exphbs = require('express-handlebars'),
   passport = require('passport'),
   session = require('express-session'),
-  RedisStore = require('connect-redis')(session);
-  
+  RedisStore = require('connect-redis')(session),
+  redis = require('redis').createClient(),
+  config = require('./config');  
 
 /**** helpers ****/
 var handlebars = require('./helpers/handlebars');
@@ -80,6 +81,22 @@ app.notifiers = [];
 app.expressInit = function() {
 
   var exp = express();
+
+  /* Alan: session and passport session */
+  exp.use(session({
+	   store: new RedisStore({
+		   host: 'localhost',
+		   port: 6397,
+		   client: redis
+			       }),
+	   secret: "secretysecret",
+	   resave: false,
+	   saveUninitialized: false
+  }));
+
+  exp.use(passport.initialize());
+  exp.use(passport.session());
+
 
   exp.engine('handlebars', exphbs({
     layoutsDir: path.join(__dirname, 'views', 'layouts'),
