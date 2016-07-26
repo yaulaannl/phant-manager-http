@@ -82,6 +82,9 @@ app.expressInit = function() {
 
   var exp = express();
 
+  /*Alan: init */
+  require('./authentication').init(exp);
+
   /* Alan: session and passport session */
   exp.use(session({
 	   store: new RedisStore({
