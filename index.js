@@ -181,7 +181,7 @@ app.expressInit = function() {
     res.format({
       html: function() {
         res.status(status).render('error', {
-          message: err.stack,
+          message: err.message,
           error: {}
         });
       },
