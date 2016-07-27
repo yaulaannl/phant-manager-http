@@ -5,7 +5,7 @@ const authenticationMiddleware = require('./middleware')
 
 const user = {
   username: 'holaman',
-  password: '12345',
+  password: '123edxc',
   id: 1
 }
 

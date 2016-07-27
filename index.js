@@ -98,7 +98,7 @@ app.expressInit = function() {
   //use favicon  
   exp.use(
     favicon(
-      path.join(__dirname, 'public', 'img', 'favicon.ico'), {
+      path.join(__dirname, 'public', 'img', 'mbhlogo.png'), {
         maxAge: 2592000000
       } // 1 month
     )
