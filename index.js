@@ -17,13 +17,13 @@ var express = require('express'),
   exphbs = require('express-handlebars'),
   passport = require('passport'),
   session = require('express-session'),
-  RedisStore = require('connect-redis')(session),
-  redis = require('redis').createClient(),
   config = require('./config');  
+    
+
+
 
 /**** helpers ****/
 var handlebars = require('./helpers/handlebars');
-
 /**** routes ****/
 var index = require('./routes'),
   stream = require('./routes/stream');
@@ -63,6 +63,7 @@ function PhantManager(config) {
 
   };
 
+  /* add properties to responder*/
   util._extend(responder, events.EventEmitter.prototype);
   util._extend(responder, app);
   util._extend(responder, config);
@@ -80,25 +81,8 @@ app.notifiers = [];
 
 app.expressInit = function() {
 
+  //initialize express	
   var exp = express();
-
-  /*Alan: init */
-  require('./authentication').init(exp);
-
-  /* Alan: session and passport session */
-  exp.use(session({
-	   store: new RedisStore({
-		   host: 'localhost',
-		   port: 6397,
-		   client: redis
-			       }),
-	   secret: "secretysecret",
-	   resave: false,
-	   saveUninitialized: false
-  }));
-
-  exp.use(passport.initialize());
-  exp.use(passport.session());
 
 
   exp.engine('handlebars', exphbs({
@@ -166,6 +150,20 @@ app.expressInit = function() {
 
   }
 
+
+  /* Alan: session and passport session */
+  exp.use(session({
+	   secret: "superawesomesecretyourmomisabitch",
+	   resave: false,
+	   saveUninitialized: false
+  }));
+
+  exp.use(passport.initialize());
+  exp.use(passport.session());
+
+  /*Alan: init */
+  require('./authentication').init(exp);
+
   exp.use(exp.router);
 
   /**** 404 handler ****/
@@ -183,7 +181,7 @@ app.expressInit = function() {
     res.format({
       html: function() {
         res.status(status).render('error', {
-          message: err.message,
+          message: err.stack,
           error: {}
         });
       },
@@ -197,6 +195,22 @@ app.expressInit = function() {
 
   });
 
+
+  /* 
+   * login section
+   * page: login 
+   * url: login
+   * after authenticate: all rediected to home page (success or fail)
+   * */ 
+  exp.get('/login', index.login);  //login
+  
+  exp.post('/login', passport.authenticate('local', {
+	      successRedirect: '/streams/make',
+	      failureRedirect: '/login'
+	}));
+
+
+
   //main route assigning section
   exp.post('/streams.:ext', stream.create.bind(this));
   exp.post('/streams', stream.create.bind(this));
@@ -208,8 +222,17 @@ app.expressInit = function() {
   exp.delete('/streams/:publicKey.:ext', stream.remove.bind(this));
   exp.delete('/streams/:publicKey', stream.remove.bind(this));
 
-  exp.get('/', index.home);
-  exp.get('/streams/make', stream.make);
+
+  /*
+   * Get
+   * 
+   * 
+   * */
+
+  exp.get('/', index.home);  //home
+
+  //exp.get('/streams/make', stream.make);
+  exp.get('/streams/make', passport.authenticationMiddleware(), stream.make);
   exp.get('/streams/delete', stream.delete);
   exp.get('/streams/clear', stream.clear);
   exp.get('/streams/tag/:tag.:ext', stream.tag.bind(this));

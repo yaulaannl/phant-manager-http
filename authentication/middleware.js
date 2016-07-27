@@ -1,9 +1,10 @@
 function authenticationMiddleware () {
   return function (req, res, next) {
+    console.log(req.session);
     if (req.isAuthenticated()) {
-      return next()
+      return next();
     }
-    res.redirect('/')
+    res.redirect('/');
   }
 }
 

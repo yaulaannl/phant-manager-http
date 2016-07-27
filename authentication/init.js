@@ -5,7 +5,7 @@ const authenticationMiddleware = require('./middleware')
 
 const user = {
   username: 'holaman',
-  password: 'senpai-notice-314',
+  password: '12345',
   id: 1
 }
 
@@ -37,7 +37,8 @@ function initPassport () {
         if (password !== user.password  ) {
           return done(null, false)
         }
-        return done(null, user)
+	console.log('logging in')
+	return done(null, user)
       })
     }
   ))
