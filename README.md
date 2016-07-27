@@ -1,6 +1,10 @@
 # phant-manager-http [![Build Status](https://secure.travis-ci.org/sparkfun/phant-manager-http.png?branch=master)](http://travis-ci.org/sparkfun/phant-manager-http)
 
-express based manager module for phant
+express based manager module for phant -- hacked version by Modern Black Hand
+
+## Hacked version changes
+
+Add simple signin control to restrict users.
 
 ## Using phant-manager-http with phant
 This section outlines how to quickly get this package up and running with the **phant** module.
