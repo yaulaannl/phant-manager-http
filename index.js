@@ -205,9 +205,25 @@ app.expressInit = function() {
   exp.get('/login', index.login);  //login
   
   exp.post('/login', passport.authenticate('local', {
-	      successRedirect: '/streams/make',
+	      successRedirect: '/',
 	      failureRedirect: '/login'
 	}));
+
+  //protect all endpoints except home and login
+  exp.all('*', function(req,res,next){
+	//non authenticated routes
+	if(req.url === '/' || req.url === '/login') return next();
+	if(req.url === '/inputi/*' || req.url === '/output/*') return next();
+
+	console.log(req.session);
+        if (req.isAuthenticated()) {
+		console.log('is authenticated');
+		return next();
+	}
+	res.redirect('/login');
+
+  });
+
 
 
 
@@ -231,8 +247,8 @@ app.expressInit = function() {
 
   exp.get('/', index.home);  //home
 
-  //exp.get('/streams/make', stream.make);
-  exp.get('/streams/make', passport.authenticationMiddleware(), stream.make);
+  exp.get('/streams/make', stream.make);
+  //exp.get('/streams/make', passport.authenticationMiddleware(), stream.make);
   exp.get('/streams/delete', stream.delete);
   exp.get('/streams/clear', stream.clear);
   exp.get('/streams/tag/:tag.:ext', stream.tag.bind(this));
