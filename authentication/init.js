@@ -41,7 +41,6 @@ function initPassport () {
     }
   ))
 
-  passport.myOwnSecret = "modern314white15hand926desu"
 }
 
 module.exports = initPassport
