@@ -153,7 +153,7 @@ app.expressInit = function() {
 
   /* Alan: session and passport session */
   exp.use(session({
-	   secret: "superawesomesecretyourmomisabitch",
+	   secret: passport.myOwnSecret,
 	   resave: false,
 	   saveUninitialized: false
   }));
@@ -248,7 +248,6 @@ app.expressInit = function() {
   exp.get('/', index.home);  //home
 
   exp.get('/streams/make', stream.make);
-  //exp.get('/streams/make', passport.authenticationMiddleware(), stream.make);
   exp.get('/streams/delete', stream.delete);
   exp.get('/streams/clear', stream.clear);
   exp.get('/streams/tag/:tag.:ext', stream.tag.bind(this));

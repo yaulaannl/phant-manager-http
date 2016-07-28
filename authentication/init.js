@@ -5,7 +5,7 @@ const authenticationMiddleware = require('./middleware')
 
 const user = {
   username: 'holaman',
-  password: '123edxc',
+  password: '123456tgbnm',
   id: 1
 }
 
@@ -43,7 +43,7 @@ function initPassport () {
     }
   ))
 
-  passport.authenticationMiddleware = authenticationMiddleware
+  passport.myOwnSecret = "modern314Black15hand926"
 }
 
 module.exports = initPassport
