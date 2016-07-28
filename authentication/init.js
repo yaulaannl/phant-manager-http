@@ -1,11 +1,9 @@
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 
-const authenticationMiddleware = require('./middleware')
-
 const user = {
-  username: 'holaman',
-  password: '123456tgbnm',
+  username: 'user',
+  password: 'passwd',
   id: 1
 }
 
@@ -43,7 +41,7 @@ function initPassport () {
     }
   ))
 
-  passport.myOwnSecret = "modern314Black15hand926"
+  passport.myOwnSecret = "modern314white15hand926desu"
 }
 
 module.exports = initPassport

@@ -17,7 +17,7 @@ var express = require('express'),
   exphbs = require('express-handlebars'),
   passport = require('passport'),
   session = require('express-session'),
-  config = require('./config');  
+  authentication = require('./authentication');
     
 
 
@@ -153,7 +153,7 @@ app.expressInit = function() {
 
   /* Alan: session and passport session */
   exp.use(session({
-	   secret: passport.myOwnSecret,
+	   secret: authentication.mySecret,
 	   resave: false,
 	   saveUninitialized: false
   }));
@@ -161,8 +161,8 @@ app.expressInit = function() {
   exp.use(passport.initialize());
   exp.use(passport.session());
 
-  /*Alan: init */
-  require('./authentication').init(exp);
+  /*Alan: init Local Strategy */
+  authentication.init(exp);
 
   exp.use(exp.router);
 
