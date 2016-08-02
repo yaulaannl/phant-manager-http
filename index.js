@@ -6,6 +6,12 @@
  * Licensed under the GPL v3 license.
  */
 
+/*
+Note: 
+08/03/16: authentication folder will not be updated from now on
+*/
+
+
 /**** Module dependencies ****/
 var express = require('express'),
   path = require('path'),
