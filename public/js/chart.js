@@ -11,8 +11,11 @@
       }).done(function (results) {
         //define chart creation function
         function getChart(dName, id_tag){
-                var data = new google.visualization.DataTable();
-                data.addColumn('datetime', 'Time');
+
+		var title = 'Tag \"' + dName + '\" VS timestamp';	
+		var data = new google.visualization.DataTable();
+
+		data.addColumn('datetime', 'Time');
                 data.addColumn('number',dName);
 
                 $.each(results, function (i, row) {
@@ -21,7 +24,7 @@
                 });
 
                 var chart = new google.visualization.LineChart($(id_tag).get(0));
-                chart.draw(data);
+                chart.draw(data, {title: title});
         }
 
 
