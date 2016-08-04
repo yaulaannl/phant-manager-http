@@ -222,10 +222,12 @@ app.expressInit = function() {
 	//home and login
 	if(req.url === '/' || req.url === '/login') return next();
 	
-	//data io
-	if(req.url === '/input/*' || req.url === '/output/*') return next();
+	//view public stream list
+	if(req.url === '/streams/' ) return next();
 
-	console.log(req.session);
+        if (req.url.match(/^\/streams\/chart\//)) return next();
+
+    	    console.log(req.session);
         if (req.isAuthenticated()) {
 		console.log('is authenticated');
 		return next();
@@ -278,7 +280,7 @@ app.expressInit = function() {
   exp.get('/streams/:publicKey.:ext', stream.view.bind(this));
   exp.get('/streams/:publicKey', stream.view.bind(this));
   //Alan: add chart
-  exp.get('/streams/:publicKey/chart', stream.chart.bind(this));
+  exp.get('/streams/chart/:publicKey', stream.chart.bind(this));
   exp.get('/streams.:ext', stream.list.bind(this));
   exp.get('/streams', stream.list.bind(this));
   exp.get('/:alias.:ext', stream.alias.bind(this));
