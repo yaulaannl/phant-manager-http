@@ -209,12 +209,28 @@ app.expressInit = function() {
    * after authenticate: all rediected to home page (success or fail)
    * */ 
   exp.get('/login', index.login);  //login
-  
-  exp.post('/login', passport.authenticate('local', {
-	      successRedirect: '/',
-	      failureRedirect: '/login'
-	}));
 
+  exp.post('/login', function (req,res,next){
+	passport.authenticate('local', function(err,user,info) {
+		if (err){
+			return next(err);
+		}else if (!user){
+			console.log('message: ' + info.message);
+			return res.redirect('/login');
+		}else{
+			req.logIn(user, function (err){
+				if(err){
+					return next(err);
+				}
+				var redirectTo = req.session.redirectTo ? req.session.redirectTo : '/login';
+				delete req.session.redirectTo;
+				res.redirect(redirectTo);
+
+			});
+		}
+	
+	})(req,res,next);
+  });
   //protect all endpoints except home and login
   exp.all('*', function(req,res,next){
 	//non authenticated routes
@@ -232,6 +248,8 @@ app.expressInit = function() {
 		console.log('is authenticated');
 		return next();
 	}
+	//remembering current path
+	req.session.redirectTo = req.path;
 	res.redirect('/login');
 
   });
