@@ -218,8 +218,12 @@ app.expressInit = function() {
   //protect all endpoints except home and login
   exp.all('*', function(req,res,next){
 	//non authenticated routes
+
+	//home and login
 	if(req.url === '/' || req.url === '/login') return next();
-	if(req.url === '/inputi/*' || req.url === '/output/*') return next();
+	
+	//data io
+	if(req.url === '/input/*' || req.url === '/output/*') return next();
 
 	console.log(req.session);
         if (req.isAuthenticated()) {
@@ -273,6 +277,8 @@ app.expressInit = function() {
   exp.get('/streams/:publicKey/keys/:privateKey', stream.keys.bind(this));
   exp.get('/streams/:publicKey.:ext', stream.view.bind(this));
   exp.get('/streams/:publicKey', stream.view.bind(this));
+  //Alan: add chart
+  exp.get('/streams/:publicKey/chart', stream.chart.bind(this));
   exp.get('/streams.:ext', stream.list.bind(this));
   exp.get('/streams', stream.list.bind(this));
   exp.get('/:alias.:ext', stream.alias.bind(this));

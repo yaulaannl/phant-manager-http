@@ -1,9 +1,13 @@
 (function($) {
 
+
+  //sub-functions/variables used for the main function
+
   var templates = {},
       stream = {},
       page = 1;
 
+  //load template for displaying data
   stream.loadTemplates = function(el) {
 
     var promises = [];
@@ -23,10 +27,12 @@
 
   };
 
+  //load data
   stream.loadData = function(el) {
 
     var offset = (page - 1) * 100;
 
+    //load data from http via get
     $.get('/output/' + el.data('key') + '.json?offset=' + offset + '&limit=100', function(records) {
 
       var keys = [],
@@ -121,18 +127,26 @@
 
   };
 
+
+  //add the function stream() to jQuery object
+  //called at $('div.stream').stream();
+  //in views/streams/view.handlebars  
   $.fn.stream = function() {
 
+    //loading templates for displaying data	  
     var promises = stream.loadTemplates(this),
         el = this;
 
+    //when promises is done, do loadData and lodaStats
     $.when.apply(this, promises).done(function() {
       stream.loadData(el);
       stream.loadStats(el);
     });
 
+    //link edit html tag
     $('#edit_stream').click(stream.edit);
 
+    //case for pagination
     this.find('ul.pager li').click(function(e) {
 
       e.preventDefault();

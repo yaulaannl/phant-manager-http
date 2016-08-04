@@ -189,6 +189,34 @@ exports.country = function(req, res, next) {
 
 };
 
+
+exports.chart = function(req, res, next) {
+
+  var id = this.keychain.getIdFromPublicKey(req.param('publicKey')),
+    error = Err.bind(this, next);
+
+  this.metadata.get(id, function(err, stream) {
+
+    if (!stream || err) {
+      return error(404, 'Stream not found.');
+    }
+
+    res.format({
+      html: function() {
+        res.render('streams/chart', {
+          title: 'Stream ' + req.param('publicKey'),
+          publicKey: req.param('publicKey'),
+          stream: stream
+        });
+      }
+    });
+
+  });
+
+};
+
+
+
 exports.view = function(req, res, next) {
 
   var id = this.keychain.getIdFromPublicKey(req.param('publicKey')),
